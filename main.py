@@ -7,7 +7,7 @@ from datetime import datetime
 from aiogram import Bot, Dispatcher, F, Router
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
+from aiogram.filters import Command, CommandStart
 from aiogram.types import (
     CallbackQuery,
     InlineKeyboardButton,
@@ -46,6 +46,14 @@ def load_app_file():
             return json.load(f)
     return None
 
+
+def delete_app_file():
+    if os.path.exists(APP_DATA_FILE):
+        os.remove(APP_DATA_FILE)
+        return True
+    return False
+
+
 WELCOME_TEXT = (
     "Assalomu alaykum! 👋\n\n"
     "Bu bot — yo'naltiruvchi bot hisoblanadi.\n\n"
@@ -81,6 +89,21 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             [InlineKeyboardButton(text="🤖 Botga kirish", url=SECOND_BOT_URL)],
             [InlineKeyboardButton(text="🎮 Kichik o'yin", url=MINI_GAME_URL)],
             [InlineKeyboardButton(text="📥 Web ilovasini yuklash", callback_data="get_app")],
+        ]
+    )
+
+
+def admin_file_kb(has_file: bool) -> InlineKeyboardMarkup:
+    """Admin uchun joriy fayl holatiga qarab boshqaruv tugmalari."""
+    if has_file:
+        return InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="🗑 Faylni o'chirish", callback_data="delete_app_file")]
+            ]
+        )
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🔄 Holatni yangilash", callback_data="check_app_file")]
         ]
     )
 
@@ -123,13 +146,52 @@ async def send_app(callback: CallbackQuery, bot: Bot):
     await callback.answer()
 
 
+@router.message(Command("fayl"), F.from_user.id == ADMIN_ID)
+async def cmd_admin_file(message: Message):
+    """Admin joriy yuklangan faylni va uni o'chirish tugmasini ko'radi."""
+    app = load_app_file()
+    if app:
+        text = f"📄 Hozirgi fayl: <b>{app.get('file_name') or 'nomsiz fayl'}</b>"
+    else:
+        text = "⚠️ Hozircha hech qanday fayl yuklanmagan."
+    await message.answer(text, reply_markup=admin_file_kb(bool(app)))
+
+
+@router.callback_query(F.data == "delete_app_file", F.from_user.id == ADMIN_ID)
+async def cb_delete_app_file(callback: CallbackQuery):
+    deleted = delete_app_file()
+    if deleted:
+        await callback.message.edit_text(
+            "✅ Fayl muvaffaqiyatli o'chirildi. Endi foydalanuvchilarga fayl yuborilmaydi.",
+            reply_markup=admin_file_kb(False),
+        )
+    else:
+        await callback.message.edit_text(
+            "⚠️ O'chiradigan fayl topilmadi.",
+            reply_markup=admin_file_kb(False),
+        )
+    await callback.answer("O'chirildi" if deleted else "Fayl yo'q edi")
+
+
+@router.callback_query(F.data == "check_app_file", F.from_user.id == ADMIN_ID)
+async def cb_check_app_file(callback: CallbackQuery):
+    app = load_app_file()
+    if app:
+        text = f"📄 Hozirgi fayl: <b>{app.get('file_name') or 'nomsiz fayl'}</b>"
+    else:
+        text = "⚠️ Hozircha hech qanday fayl yuklanmagan."
+    await callback.message.edit_text(text, reply_markup=admin_file_kb(bool(app)))
+    await callback.answer()
+
+
 @router.message(F.from_user.id == ADMIN_ID, F.document)
 async def admin_upload_app(message: Message):
     """Admin botga fayl (apk, zip va h.k.) yuborsa, avtomatik ilova sifatida saqlanadi."""
     save_app_file(message.document.file_id, message.document.file_name or "")
     await message.answer(
         f"✅ Ilova saqlandi: <b>{message.document.file_name or 'nomsiz fayl'}</b>\n"
-        "Endi foydalanuvchilar '📥 Web ilovasini yuklash' tugmasini bossa, shu fayl ularga yuboriladi."
+        "Endi foydalanuvchilar '📥 Web ilovasini yuklash' tugmasini bossa, shu fayl ularga yuboriladi.",
+        reply_markup=admin_file_kb(True),
     )
 
 
