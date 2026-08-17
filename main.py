@@ -25,7 +25,7 @@ PORT = int(os.getenv("PORT", "10000"))  # Render bu o'zgaruvchini o'zi beradi
 
 # ==== O'ZGARTIRISHINGIZ MUMKIN BO'LGAN QISM ====
 WEBSITE_URL = "https://1myblog.netlify.app/"
-CHANNEL_URL = "https://t.me/CodeVersePY"
+CHANNEL_URL = "https://t.me/+UCpfGMn2R3Y2NmU6"
 SECOND_BOT_URL = "https://t.me/YashirinAloqaBot"
 MINI_GAME_URL = "https://kichik-oyin.netlify.app/"
 APP_DATA_FILE = "app_file.json"  # admin yuborgan ilova fayli shu yerda saqlanadi
