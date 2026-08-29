@@ -71,12 +71,8 @@ WELCOME_TEXT = (
     "✅ Bepul foydalanish mumkin\n"
     "✅ Yuklab olib darhol ishga tushirish mumkin\n\n"
     "🤖 <b>Yashirin Aloqa Bot</b>\n"
-    "Mening shaxsiy yordamchi botim. Kimligingizni bilmasdan siz bilan suhbatlashish mumkin.\n\n"
-    "🎮 <b>Kichik O'yin</b>\n"
-    "Vaqtingizni qiziqarli o'tkazish uchun kichik test-o'yin tayyorladim.\n"
-    "• ❓ Jami 5 ta savol bor\n"
-    "• 💡 Xato javob bersangiz ham to'g'ri javob bo'yicha tavsiya chiqadi\n"
-    "• 🎯 Bilimingizni sinab ko'ring va o'rganing\n\n"
+
+    
     "Quyidagi tugmalardan birini tanlang 👇"
 )
 
@@ -87,7 +83,6 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             [InlineKeyboardButton(text="🌐 Saytga kirish", url=WEBSITE_URL)],
             [InlineKeyboardButton(text="💻 Kanalga kirish", url=CHANNEL_URL)],
             [InlineKeyboardButton(text="🤖 Botga kirish", url=SECOND_BOT_URL)],
-            [InlineKeyboardButton(text="🎮 Kichik o'yin", url=MINI_GAME_URL)],
             [InlineKeyboardButton(text="📥 Web ilovasini yuklash", callback_data="get_app")],
         ]
     )
