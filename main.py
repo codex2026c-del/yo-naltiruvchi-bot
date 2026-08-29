@@ -28,6 +28,7 @@ WEBSITE_URL = "https://1myblog.netlify.app/"
 CHANNEL_URL = "https://t.me/+UCpfGMn2R3Y2NmU6"
 SECOND_BOT_URL = "https://t.me/YashirinAloqaBot"
 MINI_GAME_URL = "https://kichik-oyin.netlify.app/"
+PORTFOLIO_URL = "https://portfolyu2026.netlify.app/"
 APP_DATA_FILE = "app_file.json"  # admin yuborgan ilova fayli shu yerda saqlanadi
 # =================================================
 
@@ -84,6 +85,7 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             [InlineKeyboardButton(text="💻 Kanalga kirish", url=CHANNEL_URL)],
             [InlineKeyboardButton(text="🤖 Botga kirish", url=SECOND_BOT_URL)],
             [InlineKeyboardButton(text="📥 Web ilovasini yuklash", callback_data="get_app")],
+            [InlineKeyboardButton(text="🧑‍💻 Portfolyo", url=PORTFOLIO_URL)],
         ]
     )
 
