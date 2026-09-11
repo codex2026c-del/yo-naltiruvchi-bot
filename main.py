@@ -30,6 +30,7 @@ SECOND_BOT_URL = "https://t.me/YashirinAloqaBot"
 MINI_GAME_URL = "https://kichik-oyin.netlify.app/"
 PORTFOLIO_URL = "https://portfolyu2026.netlify.app/"
 CANVERTPRO_URL = "https://canvertpro.netlify.app/"
+QR_CODE_URL = "https://sozlarniqrcodegaalmashtirish.netlify.app/"
 APP_DATA_FILE = "app_file.json"  # admin yuborgan ilova fayli shu yerda saqlanadi
 # =================================================
 
@@ -82,6 +83,13 @@ WELCOME_TEXT = (
     "✅ Butunlay bepul, ro'yxatdan o'tish shart emas\n"
     "✅ Manba kodi kerak bo'lsa, mendan so'rab olishingiz mumkin\n"
     f"🔗 {CANVERTPRO_URL}\n\n"
+    "🔳 <b>So'zni QR-kodga aylantirish</b>\n"
+    "Matn, link, telefon raqami, email va hatto CV'ni bir zumda QR-kodga aylantiruvchi qulay veb-ilova.\n"
+    "1️⃣ Yuqoridan kerakli bo'limni tanlang (masalan, matn uchun «TXT»)\n"
+    "2️⃣ Pastdagi maydonga so'zingizni yozing — QR-kod shu zahoti hosil bo'ladi\n"
+    "3️⃣ Hosil bo'lgan QR-kod ostidagi PNG yoki JPG tugmasini bosib, rasm holida yuklab oling\n"
+    "4️⃣ «Save to history» tugmasini bosib, uni sayt tarixiga saqlab qo'ying\n"
+    f"🔗 {QR_CODE_URL}\n\n"
     "Quyidagi tugmalardan birini tanlang 👇"
 )
 
@@ -95,6 +103,7 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             [InlineKeyboardButton(text="📥 Web ilovasini yuklash", callback_data="get_app")],
             [InlineKeyboardButton(text="🧑‍💻 Portfolyo", url=PORTFOLIO_URL)],
             [InlineKeyboardButton(text="📄 CanvertPro", url=CANVERTPRO_URL)],
+            [InlineKeyboardButton(text="🔳 QR-kod yaratish", url=QR_CODE_URL)],
         ]
     )
 
