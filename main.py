@@ -31,6 +31,7 @@ MINI_GAME_URL = "https://kichik-oyin.netlify.app/"
 PORTFOLIO_URL = "https://portfolyu2026.netlify.app/"
 CANVERTPRO_URL = "https://canvertpro.netlify.app/"
 QR_CODE_URL = "https://sozlarniqrcodegaalmashtirish.netlify.app/"
+CV_BUILDER_URL = "https://cvbulder.netlify.app/"
 APP_DATA_FILE = "app_file.json"  # admin yuborgan ilova fayli shu yerda saqlanadi
 # =================================================
 
@@ -96,6 +97,15 @@ WELCOME_TEXT = (
     "3️⃣ Ostidagi PNG yoki JPG tugmasini bosib, rasm holida yuklab oling\n"
     "4️⃣ «Save to history» tugmasini bosib, sayt tarixiga saqlang\n\n"
     "━━━━━━━━━━━━━━━━━━━━\n\n"
+    "📋 <b>CVBuilder</b>\n"
+    "Ishga kirishda talab qilinadigan professional CV'ni bir necha daqiqada tayyorlab beruvchi bepul veb-ilova.\n"
+    "✅ Shaxsiy va aloqa ma'lumotlari\n"
+    "✅ Ta'lim va malaka\n"
+    "✅ Ish tajribasi\n"
+    "✅ Ko'nikma va tillar\n"
+    "✅ Rasm qo'yish imkoniyati\n"
+    "✅ Butunlay bepul\n\n"
+    "━━━━━━━━━━━━━━━━━━━━\n\n"
     "Quyidagi tugmalardan birini tanlang 👇"
 )
 
@@ -110,6 +120,7 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             [InlineKeyboardButton(text="🧑‍💻 Portfolyo", url=PORTFOLIO_URL)],
             [InlineKeyboardButton(text="📄 CanvertPro", url=CANVERTPRO_URL)],
             [InlineKeyboardButton(text="🔳 QR-kod yaratish", url=QR_CODE_URL)],
+            [InlineKeyboardButton(text="📋 CV yaratish", url=CV_BUILDER_URL)],
         ]
     )
 
