@@ -4,6 +4,7 @@ import logging
 import os
 from datetime import datetime
 
+import aiohttp
 from aiogram import Bot, Dispatcher, F, Router
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -22,6 +23,10 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_ID = int(os.getenv("ADMIN_ID", "0"))
 PORT = int(os.getenv("PORT", "10000"))  # Render bu o'zgaruvchini o'zi beradi
+
+# Render bu o'zgaruvchini avtomatik beradi (masalan: https://mening-botim.onrender.com)
+SELF_URL = os.getenv("RENDER_EXTERNAL_URL") or os.getenv("SELF_URL")
+PING_INTERVAL = 600  # 10 daqiqa (sekundlarda)
 
 # ==== O'ZGARTIRISHINGIZ MUMKIN BO'LGAN QISM ====
 WEBSITE_URL = "https://1myblog.netlify.app/"
@@ -271,6 +276,26 @@ async def start_web_server():
     logging.info(f"HTTP server {PORT}-portda ishga tushdi (keep-alive uchun)")
 
 
+async def keep_alive():
+    """Bot o'z manziliga muntazam so'rov yuborib, Render uxlab qolishining oldini oladi."""
+    if not SELF_URL:
+        logging.warning("SELF_URL topilmadi, keep-alive ishlamaydi.")
+        return
+
+    url = SELF_URL.rstrip("/") + "/healthz"
+    await asyncio.sleep(30)  # server to'liq ishga tushishini kutamiz
+
+    timeout = aiohttp.ClientTimeout(total=15)
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        while True:
+            try:
+                async with session.get(url) as resp:
+                    logging.info(f"Keep-alive ping: {resp.status}")
+            except Exception as e:
+                logging.warning(f"Keep-alive xatosi: {e}")
+            await asyncio.sleep(PING_INTERVAL)
+
+
 async def main():
     if not BOT_TOKEN:
         raise RuntimeError("BOT_TOKEN topilmadi. .env faylini tekshiring.")
@@ -281,9 +306,13 @@ async def main():
 
     await bot.delete_webhook(drop_pending_updates=True)
 
-    # HTTP server va botni bir vaqtda ishga tushiramiz
+    # HTTP server, keep-alive va botni bir vaqtda ishga tushiramiz
     await start_web_server()
-    await dp.start_polling(bot)
+    keep_alive_task = asyncio.create_task(keep_alive())  # fon rejimida ishlaydi
+    try:
+        await dp.start_polling(bot)
+    finally:
+        keep_alive_task.cancel()
 
 
 if __name__ == "__main__":
